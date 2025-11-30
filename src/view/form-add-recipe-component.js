@@ -3,6 +3,7 @@ import { AbstractComponent } from '../framework/view/abstract-component.js';
 function createFormAddRecipeComponentTemplate() {
   return `
     <div class="search-section">
+      <h2 style="color: red;">ТЕСТ: Форма загружена!</h2>
       <input type="text" class="search-input" placeholder="🔍 Поиск рецептов по названию, ингредиентам...">
       <button class="search-btn" type="button">Найти</button>
       <button class="add-recipe-main-btn" type="button">
@@ -11,72 +12,25 @@ function createFormAddRecipeComponentTemplate() {
       </button>
     </div>
     
+    <!-- ПРОСТАЯ СЕТКА ФИЛЬТРОВ -->
     <div class="filters-section">
+      <h3 style="color: blue;">Фильтры должны быть здесь:</h3>
       <div class="filters-grid">
         <div class="filter-section">
-          <div class="filter-title">🌍 СТРАНА / КУХНЯ</div>
+          <div class="filter-title">🌍 КУХНЯ</div>
           <select class="filter-select" id="cuisineFilter">
             <option value="">Все кухни</option>
-            <option value="🇷🇺 Русская">🇷🇺 Русская</option>
-            <option value="🇮🇹 Итальянская">🇮🇹 Итальянская</option>
-            <option value="🇫🇷 Французская">🇫🇷 Французская</option>
-            <option value="🇨🇳 Китайская">🇨🇳 Китайская</option>
-            <option value="🇯🇵 Японская">🇯🇵 Японская</option>
-            <option value="🇲🇽 Мексиканская">🇲🇽 Мексиканская</option>
+            <option value="🇷🇺 Русская">Русская</option>
+            <option value="🇮🇹 Итальянская">Итальянская</option>
           </select>
         </div>
 
         <div class="filter-section">
-          <div class="filter-title">⏱️ ВРЕМЯ ПРИГОТОВЛЕНИЯ</div>
+          <div class="filter-title">⏱️ ВРЕМЯ</div>
           <select class="filter-select" id="timeFilter">
             <option value="">Любое время</option>
-            <option value="fast">🚀 Быстро (до 20 мин)</option>
-            <option value="short">⚡ До 30 минут</option>
-            <option value="medium">🕐 До 1 часа</option>
-            <option value="long">⏳ Более 1 часа</option>
-          </select>
-        </div>
-
-        <div class="filter-section">
-          <div class="filter-title">📊 СЛОЖНОСТЬ</div>
-          <select class="filter-select" id="difficultyFilter">
-            <option value="">Любая сложность</option>
-            <option value="easy">👶 Начинающий</option>
-            <option value="medium">👨‍🍳 Любитель</option>
-            <option value="hard">🧑‍🍳 Профессионал</option>
-          </select>
-        </div>
-
-        <div class="filter-section">
-          <div class="filter-title">🍽️ ТИП БЛЮДА</div>
-          <select class="filter-select" id="categoryFilter">
-            <option value="">Все типы</option>
-            <option value="Закуски">🥗 Закуски</option>
-            <option value="Супы">🍲 Супы</option>
-            <option value="Основные">🍛 Основные блюда</option>
-            <option value="Десерты">🍰 Десерты</option>
-            <option value="Завтраки">🥞 Завтраки</option>
-          </select>
-        </div>
-
-        <div class="filter-section">
-          <div class="filter-title">⭐ РЕЙТИНГ</div>
-          <select class="filter-select" id="ratingFilter">
-            <option value="">Любой рейтинг</option>
-            <option value="4.5">⭐ 4.5+ Отлично</option>
-            <option value="4.0">⭐ 4.0+ Хорошо</option>
-            <option value="3.5">⭐ 3.5+ Нормально</option>
-          </select>
-        </div>
-
-        <div class="filter-section">
-          <div class="filter-title">🏷️ ТЕГИ / ОСОБЕННОСТИ</div>
-          <select class="filter-select" id="tagsFilter">
-            <option value="">Все теги</option>
-            <option value="Острые">🌶️ Острые</option>
-            <option value="Вегетарианские">🥬 Вегетарианские</option>
-            <option value="Здоровые">💚 Здоровые</option>
-            <option value="Быстро">⚡ Быстро</option>
+            <option value="fast">Быстро</option>
+            <option value="medium">Средне</option>
           </select>
         </div>
       </div>
