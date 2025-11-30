@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlavorHub - Кулинарные рецепты</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="board-app">
+    <main class="board-app__main">
+        <div class="container">
+            <div class="hero-section">
+                <h1 class="hero-title">Откройте мир вкусов</h1>
+                <p class="hero-subtitle">Более 1000 проверенных рецептов для вашей кухни</p>
+            </div>
+
+            <div id="recipeBoardContainer" class="recipe-board-container">
+                <div class="loading-message">
+                    Загрузка рецептов...
+                </div>
+            </div>
+
+            <div class="features-section">
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Библиотека рецептов</h3>
+                    <p>Более 1000 проверенных рецептов от шеф-поваров</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Быстрый поиск</h3>
+                    <p>Умный поиск по ингредиентам и категориям</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Доступ везде</h3>
+                    <p>Работает на всех устройствах и платформах</p>
+                </div>
+            </div>
+
+            <div class="subscription">
+                <h3>📧 Подпишитесь на еженедельную рассылку</h3>
+                <p>Получайте новые рецепты и кулинарные советы каждую неделю</p>
+                <form id="subscribe-form">
+                    <input type="email" class="email-input" placeholder="Введите ваш email" required>
+                    <button type="submit" class="subscribe-btn">ПОДПИСАТЬСЯ</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>FlavorHub</h4>
+                    <p>Ваш надежный помощник в мире кулинарии</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Навигация</h4>
+                    <a href="#">Рецепты</a>
+                    <a href="#">Категории</a>
+                    <a href="#">О проекте</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <a href="mailto:hello@flavorhub.ru">hello@flavorhub.ru</a>
+                    <a href="tel:+79991234567">+7 (999) 123-45-67</a>
+                </div>
+            </div>
+            <div class="social-links">
+                <a href="#" class="social-link">VK</a>
+                <a href="#" class="social-link">Instagram</a>
+                <a href="#" class="social-link">Telegram</a>
+                <a href="#" class="social-link">YouTube</a>
+            </div>
+            <div class="copyright">© 2024 FlavorHub. Все права защищены.</div>
+        </div>
+    </footer>
+
+    <script src="src/main.js" type="module"></script>
+</body>
+</html>
