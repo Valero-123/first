@@ -5,14 +5,12 @@ function createFormAddRecipeComponentTemplate() {
     <div class="search-section">
       <input type="text" class="search-input" placeholder="🔍 Поиск рецептов по названию, ингредиентам...">
       <button class="search-btn" type="button">Найти</button>
-      <!-- Кнопка добавления рецепта -->
       <button class="add-recipe-main-btn" type="button">
         <span class="add-recipe-icon">+</span>
         Добавить рецепт
       </button>
     </div>
     
-    <!-- ПРОСТАЯ СЕТКА ФИЛЬТРОВ (всегда видимая) -->
     <div class="filters-section">
       <div class="filters-grid">
         <div class="filter-section">
@@ -25,10 +23,6 @@ function createFormAddRecipeComponentTemplate() {
             <option value="🇨🇳 Китайская">🇨🇳 Китайская</option>
             <option value="🇯🇵 Японская">🇯🇵 Японская</option>
             <option value="🇲🇽 Мексиканская">🇲🇽 Мексиканская</option>
-            <option value="🇬🇷 Греческая">🇬🇷 Греческая</option>
-            <option value="🇮🇳 Индийская">🇮🇳 Индийская</option>
-            <option value="🇻🇳 Вьетнамская">🇻🇳 Вьетнамская</option>
-            <option value="🇪🇸 Испанская">🇪🇸 Испанская</option>
           </select>
         </div>
 
@@ -62,9 +56,6 @@ function createFormAddRecipeComponentTemplate() {
             <option value="Основные">🍛 Основные блюда</option>
             <option value="Десерты">🍰 Десерты</option>
             <option value="Завтраки">🥞 Завтраки</option>
-            <option value="Напитки">🍹 Напитки</option>
-            <option value="Салаты">🥙 Салаты</option>
-            <option value="Выпечка">🥖 Выпечка</option>
           </select>
         </div>
 
@@ -86,13 +77,6 @@ function createFormAddRecipeComponentTemplate() {
             <option value="Вегетарианские">🥬 Вегетарианские</option>
             <option value="Здоровые">💚 Здоровые</option>
             <option value="Быстро">⚡ Быстро</option>
-            <option value="Сытные">🍖 Сытные</option>
-            <option value="Легкие">🍃 Легкие</option>
-            <option value="Праздничные">🎉 Праздничные</option>
-            <option value="Лето">☀️ Летние</option>
-            <option value="Морепродукты">🦐 Морепродукты</option>
-            <option value="Мясо">🥩 Мясо</option>
-            <option value="Сладкое">🍭 Сладкое</option>
           </select>
         </div>
       </div>

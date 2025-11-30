@@ -96,7 +96,6 @@ class App {
   }
 }
 
-// Запуск приложения
 const app = new App();
 
 if (document.readyState === 'loading') {
