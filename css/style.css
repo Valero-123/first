@@ -1335,3 +1335,364 @@ footer {
         padding: 1rem 0;
     }
 }
+/* Стили для кнопки добавления рецепта в поисковой секции */
+.add-recipe-main-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.add-recipe-main-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.add-recipe-main-btn .add-recipe-icon {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+/* Стили для кнопки очистки всех фильтров */
+.clear-all-filters-btn {
+    background: var(--surface-light);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-top: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.clear-all-filters-btn:hover {
+    background: var(--error);
+    color: white;
+    border-color: var(--error);
+}
+
+/* Стили для удаления отдельных фильтров */
+.remove-filter {
+    margin-left: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+    padding: 2px 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+}
+
+.remove-filter:hover {
+    opacity: 1;
+    background: rgba(255,255,255,0.3);
+}
+/* Анимации для карточек рецептов */
+.popular-card {
+    transition: all 0.5s ease !important;
+}
+
+/* Убедитесь, что контейнер для рецептов правильно отображается */
+.popular-grid {
+    min-height: 200px;
+}
+
+/* Стили для активных фильтров */
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    background: var(--gradient-primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin: 0.25rem;
+}
+
+.filter-chip:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.remove-filter {
+    margin-left: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+    padding: 2px 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+}
+
+.remove-filter:hover {
+    opacity: 1;
+    background: rgba(255,255,255,0.3);
+}
+
+.clear-all-filters-btn {
+    background: var(--surface-light);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-top: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.clear-all-filters-btn:hover {
+    background: var(--error);
+    color: white;
+    border-color: var(--error);
+}
+/* Стили для кнопки очистки всех фильтров */
+.clear-all-filters-btn {
+    background: var(--surface-light);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.clear-all-filters-btn:hover {
+    background: var(--error);
+    color: white;
+    border-color: var(--error);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+}
+
+.clear-all-filters-btn:active {
+    transform: translateY(0);
+}
+
+/* Иконка для кнопки очистки */
+.clear-all-filters-btn::before {
+    content: '🗑️';
+    font-size: 1rem;
+}
+
+/* Стили для активных фильтров контейнера */
+.active-filters {
+    background: var(--surface-light);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    margin: 1.5rem 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.active-filters-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.active-filters-title::before {
+    content: '🎯';
+    font-size: 1.2rem;
+}
+
+.active-filters-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+/* Стили для отдельных фильтров (чипсов) */
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    background: var(--gradient-primary);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-sm);
+}
+
+.filter-chip:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.remove-filter {
+    margin-left: 0.8rem;
+    cursor: pointer;
+    font-weight: bold;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+    padding: 2px 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    font-size: 0.8rem;
+}
+
+.remove-filter:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .active-filters {
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .active-filters-list {
+        gap: 0.5rem;
+    }
+    
+    .filter-chip {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .clear-all-filters-btn {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.85rem;
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Анимация появления активных фильтров */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.active-filters {
+    animation: slideDown 0.3s ease-out;
+}
+
+/* Темная тема */
+body.dark-theme .active-filters {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+body.dark-theme .clear-all-filters-btn {
+    background: var(--surface-light);
+    color: var(--text-secondary);
+    border-color: var(--border);
+}
+
+body.dark-theme .clear-all-filters-btn:hover {
+    background: var(--error);
+    color: white;
+    border-color: var(--error);
+}
+/* Стили для Drag&Drop */
+.draggable-recipe {
+  cursor: grab;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.draggable-recipe:active {
+  cursor: grabbing;
+}
+
+.draggable-recipe.dragging {
+  transform: rotate(5deg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.draggable-recipe.drag-over {
+  border: 2px dashed var(--primary);
+  background: var(--surface-light);
+  transform: scale(1.02);
+}
+
+.drag-handle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: grab;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+  font-size: 1.2rem;
+  z-index: 10;
+}
+
+.drag-handle:hover {
+  opacity: 1;
+}
+
+.recipes-list.drop-zone-active {
+  background: var(--surface-light);
+  border: 2px dashed var(--primary);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+/* Анимации для перетаскивания */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.popular-card {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Улучшенные стили для карточек при перетаскивании */
+.popular-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.popular-card:hover .drag-handle {
+  opacity: 1;
+}
