@@ -41,7 +41,6 @@ export default class RecipesBoardPresenter {
     // Рендерим рецепты и настраиваем обработчики
     this.#renderRecipes();
     this.#setupEventListeners();
-    this.#setupFiltersDropdown(); // Настройка выпадающего списка
   }
 
   #renderRecipes() {
@@ -83,35 +82,6 @@ export default class RecipesBoardPresenter {
     // Настраиваем обработчики для рецептов
     this.#setupRecipeEventListeners();
     this.#setupDragAndDrop();
-  }
-
-  // НОВЫЙ МЕТОД: Настройка выпадающего списка фильтров
-  #setupFiltersDropdown() {
-    const dropdownHeader = this.#boardContainer.querySelector('.dropdown-header');
-    const dropdownContent = this.#boardContainer.querySelector('.dropdown-content');
-    
-    if (dropdownHeader && dropdownContent) {
-      dropdownHeader.addEventListener('click', () => {
-        dropdownContent.classList.toggle('active');
-        const arrow = dropdownHeader.querySelector('.dropdown-arrow');
-        if (arrow) {
-          arrow.textContent = dropdownContent.classList.contains('active') ? '▲' : '▼';
-        }
-      });
-
-      // Закрытие при клике вне dropdown
-      document.addEventListener('click', (event) => {
-        if (!event.target.closest('.filters-dropdown')) {
-          dropdownContent.classList.remove('active');
-          const arrow = dropdownHeader.querySelector('.dropdown-arrow');
-          if (arrow) {
-            arrow.textContent = '▼';
-          }
-        }
-      });
-
-      console.log('✅ Filters dropdown setup completed');
-    }
   }
 
   // Drag & Drop Implementation
@@ -254,8 +224,6 @@ export default class RecipesBoardPresenter {
 
     console.log('✅ All event listeners set up');
   }
-
-  // ... остальные методы остаются без изменений (handleAddRecipe, showEditRecipeForm и т.д.)
 
   #setupRecipeEventListeners() {
     this.#boardContainer.querySelectorAll('.change').forEach(button => {
