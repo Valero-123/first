@@ -57,7 +57,7 @@ export default class RecipesBoardPresenter {
     // Получаем отфильтрованные рецепты
     const filteredRecipes = this.#recipeModel.filterRecipes(this.#currentFilters);
 
-    console.log(`🔍 Found ${filteredRecipes.length} recipes`, filteredRecipes);
+    console.log(`🔍 Found ${filteredRecipes.length} recipes`);
 
     // Обновляем UI
     this.#updateActiveFiltersDisplay();
@@ -72,25 +72,16 @@ export default class RecipesBoardPresenter {
     }
 
     // Рендерим рецепты
-    filteredRecipes.forEach((recipe, index) => {
+    filteredRecipes.forEach(recipe => {
       const recipeComponent = new RecipeComponent(recipe);
       render(recipeComponent, recipesContainer);
-      
-      // Анимация появления
-      setTimeout(() => {
-        const card = recipesContainer.lastElementChild;
-        if (card) {
-          card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
-        }
-      }, index * 100);
     });
 
     console.log(`✅ Rendered ${filteredRecipes.length} recipes`);
     
     // Настраиваем обработчики для рецептов
     this.#setupRecipeEventListeners();
-    this.#setupDragAndDrop(); // Переинициализация Drag&Drop после рендера
+    this.#setupDragAndDrop();
   }
 
   // Drag & Drop Implementation
@@ -213,7 +204,6 @@ export default class RecipesBoardPresenter {
         filter.addEventListener('change', () => {
           this.#currentFilters[key] = filter.value;
           console.log(`🔍 Filter changed: ${key} = ${filter.value}`);
-          console.log('🎛️ Current filters:', this.#currentFilters);
           this.#renderRecipes();
         });
       }
