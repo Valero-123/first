@@ -51,67 +51,85 @@ export default class RecipeModel {
   }
 
   filterRecipes(filters = {}) {
+    console.log('🔍 Starting filtration with filters:', filters);
     let filteredRecipes = [...this.#recipes];
 
+    // Filter by cuisine
     if (filters.cuisine && filters.cuisine !== '') {
-      filteredRecipes = filteredRecipes.filter(recipe => 
-        this.#extractCuisineName(recipe.cuisine) === this.#extractCuisineName(filters.cuisine)
-      );
-    }
-
-    if (filters.search && filters.search.trim() !== '') {
-      const searchTerm = filters.search.toLowerCase().trim();
-      filteredRecipes = filteredRecipes.filter(recipe =>
-        recipe.title.toLowerCase().includes(searchTerm) ||
-        recipe.description.toLowerCase().includes(searchTerm) ||
-        recipe.tags.some(tag => tag.toLowerCase().includes(searchTerm))
-      );
-    }
-
-    if (filters.time && filters.time !== '') {
       filteredRecipes = filteredRecipes.filter(recipe => {
-        const timeMinutes = this.#extractTimeMinutes(recipe.time);
-        switch (filters.time) {
-          case 'fast': return timeMinutes <= 20;
-          case 'short': return timeMinutes <= 30;
-          case 'medium': return timeMinutes <= 60;
-          case 'long': return timeMinutes > 60;
-          default: return true;
-        }
+        const recipeCuisine = this.#extractCuisineName(recipe.cuisine);
+        const filterCuisine = this.#extractCuisineName(filters.cuisine);
+        const matches = recipeCuisine === filterCuisine;
+        console.log(`🍳 ${recipe.title} - кухня: ${recipeCuisine}, фильтр: ${filterCuisine}, совпадение: ${matches}`);
+        return matches;
       });
     }
 
+    // Filter by search text
+    if (filters.search && filters.search.trim() !== '') {
+      const searchTerm = filters.search.toLowerCase().trim();
+      filteredRecipes = filteredRecipes.filter(recipe => {
+        const matches = recipe.title.toLowerCase().includes(searchTerm) ||
+                       recipe.description.toLowerCase().includes(searchTerm) ||
+                       recipe.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+        console.log(`🔍 ${recipe.title} - поиск: "${searchTerm}", совпадение: ${matches}`);
+        return matches;
+      });
+    }
+
+    // Filter by cooking time
+    if (filters.time && filters.time !== '') {
+      filteredRecipes = filteredRecipes.filter(recipe => {
+        const timeMinutes = this.#extractTimeMinutes(recipe.time);
+        let matches = false;
+        
+        switch (filters.time) {
+          case 'fast':
+            matches = timeMinutes <= 20;
+            break;
+          case 'short':
+            matches = timeMinutes <= 30;
+            break;
+          case 'medium':
+            matches = timeMinutes <= 60;
+            break;
+          case 'long':
+            matches = timeMinutes > 60;
+            break;
+          default:
+            matches = true;
+        }
+        
+        console.log(`⏱️ ${recipe.title} - время: ${recipe.time} (${timeMinutes} мин), фильтр: ${filters.time}, совпадение: ${matches}`);
+        return matches;
+      });
+    }
+
+    // Filter by difficulty
     if (filters.difficulty && filters.difficulty !== '') {
-      filteredRecipes = filteredRecipes.filter(recipe => 
-        recipe.difficultyLevel === filters.difficulty
-      );
+      filteredRecipes = filteredRecipes.filter(recipe => {
+        const matches = recipe.difficultyLevel === filters.difficulty;
+        console.log(`📊 ${recipe.title} - сложность: ${recipe.difficultyLevel}, фильтр: ${filters.difficulty}, совпадение: ${matches}`);
+        return matches;
+      });
     }
 
+    // Filter by category
     if (filters.category && filters.category !== '') {
-      filteredRecipes = filteredRecipes.filter(recipe =>
-        recipe.tags.some(tag => tag === filters.category) ||
-        recipe.category === filters.category
-      );
+      filteredRecipes = filteredRecipes.filter(recipe => {
+        const matches = recipe.category === filters.category || 
+                       recipe.tags.includes(filters.category);
+        console.log(`🍽️ ${recipe.title} - категория: ${recipe.category}, теги: ${recipe.tags}, фильтр: ${filters.category}, совпадение: ${matches}`);
+        return matches;
+      });
     }
 
-    if (filters.rating && filters.rating !== '') {
-      const minRating = parseFloat(filters.rating);
-      filteredRecipes = filteredRecipes.filter(recipe => 
-        parseFloat(recipe.rating) >= minRating
-      );
-    }
-
-    if (filters.tags && filters.tags !== '') {
-      filteredRecipes = filteredRecipes.filter(recipe =>
-        recipe.tags.some(tag => tag === filters.tags)
-      );
-    }
-
+    console.log('🔍 Filtration completed. Results:', filteredRecipes.length);
     return filteredRecipes;
   }
 
   #extractCuisineName(cuisineString) {
-    return cuisineString.replace(/[🇷🇺🇮🇹🇫🇷🇨🇳🇯🇵🇲🇽🇹🇭🇺🇸🇪🇸🇭🇺🇮🇱🇱🇧🇰🇷🇨🇺🇬🇷🇮🇳🇻🇳]/g, '').trim();
+    return cuisineString.replace(/[🇷🇺🇮🇹🇫🇷🇨🇳🇯🇵🇲🇽]/g, '').trim();
   }
 
   #extractTimeMinutes(timeString) {

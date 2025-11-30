@@ -21,18 +21,26 @@ export default class RecipesBoardPresenter {
   }
 
   init() {
+    console.log('🔍 Starting board presenter initialization...');
     this.#renderBoard();
+    console.log('✅ Board presenter initialized successfully');
   }
 
   #renderBoard() {
+    console.log('🔍 Rendering board components...');
+    
+    // Очищаем контейнер
     this.#boardContainer.innerHTML = '';
     
+    // Рендерим компоненты
     render(this.#formAddRecipeComponent, this.#boardContainer);
     render(this.#recipeListComponent, this.#boardContainer);
     
+    console.log('✅ Board components rendered');
+    
+    // Рендерим рецепты и настраиваем обработчики
     this.#renderRecipes();
     this.#setupEventListeners();
-    this.#setupDragAndDrop();
   }
 
   #renderRecipes() {
@@ -43,19 +51,27 @@ export default class RecipesBoardPresenter {
       return;
     }
     
+    // Очищаем контейнер
     recipesContainer.innerHTML = '';
 
+    // Получаем отфильтрованные рецепты
     const filteredRecipes = this.#recipeModel.filterRecipes(this.#currentFilters);
 
+    console.log(`🔍 Found ${filteredRecipes.length} recipes`, filteredRecipes);
+
+    // Обновляем UI
     this.#updateActiveFiltersDisplay();
     this.#updateResultsCounter(filteredRecipes.length);
 
+    // Если рецептов нет - показываем пустое состояние
     if (filteredRecipes.length === 0) {
+      console.log('🔍 No recipes found, showing empty state');
       const emptyComponent = new EmptyComponent();
       render(emptyComponent, recipesContainer);
       return;
     }
 
+    // Рендерим рецепты
     filteredRecipes.forEach((recipe, index) => {
       const recipeComponent = new RecipeComponent(recipe);
       render(recipeComponent, recipesContainer);
@@ -70,6 +86,9 @@ export default class RecipesBoardPresenter {
       }, index * 100);
     });
 
+    console.log(`✅ Rendered ${filteredRecipes.length} recipes`);
+    
+    // Настраиваем обработчики для рецептов
     this.#setupRecipeEventListeners();
     this.#setupDragAndDrop(); // Переинициализация Drag&Drop после рендера
   }
@@ -139,6 +158,8 @@ export default class RecipesBoardPresenter {
   }
 
   #setupEventListeners() {
+    console.log('🔍 Setting up event listeners...');
+    
     const searchInput = this.#boardContainer.querySelector('.search-input');
     const searchBtn = this.#boardContainer.querySelector('.search-btn');
     const clearFiltersBtn = this.#boardContainer.querySelector('.clear-filters-btn');
@@ -148,12 +169,15 @@ export default class RecipesBoardPresenter {
     if (searchInput && searchBtn) {
       const performSearch = () => {
         this.#currentFilters.search = searchInput.value.trim();
+        console.log('🔍 Performing search:', this.#currentFilters.search);
         this.#renderRecipes();
       };
 
       searchBtn.addEventListener('click', performSearch);
       searchInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') performSearch();
+        if (event.key === 'Enter') {
+          performSearch();
+        }
       });
 
       searchInput.addEventListener('input', () => {
@@ -162,13 +186,17 @@ export default class RecipesBoardPresenter {
           this.#renderRecipes();
         }
       });
+      
+      console.log('✅ Search listeners added');
     }
 
     // Очистка фильтров
     if (clearFiltersBtn) {
       clearFiltersBtn.addEventListener('click', () => {
+        console.log('🗑️ Clearing all filters');
         this.#clearAllFilters();
       });
+      console.log('✅ Clear filters listener added');
     }
 
     // Фильтры
@@ -184,17 +212,25 @@ export default class RecipesBoardPresenter {
       if (filter) {
         filter.addEventListener('change', () => {
           this.#currentFilters[key] = filter.value;
+          console.log(`🔍 Filter changed: ${key} = ${filter.value}`);
+          console.log('🎛️ Current filters:', this.#currentFilters);
           this.#renderRecipes();
         });
       }
     });
 
-    // Добавление рецепта
+    // Кнопка добавления рецепта
     if (addRecipeBtn) {
       addRecipeBtn.addEventListener('click', () => {
+        console.log('➕ Add recipe button clicked');
         this.#handleAddRecipe();
       });
+      console.log('✅ Add recipe button listener added');
+    } else {
+      console.error('❌ Add recipe button not found!');
     }
+
+    console.log('✅ All event listeners set up');
   }
 
   #setupRecipeEventListeners() {
@@ -320,8 +356,33 @@ export default class RecipesBoardPresenter {
       const category = form.querySelector('#addCategory').value;
       const tagsInput = form.querySelector('#addTags').value.trim();
 
-      if (!title || !time || !difficulty || !cuisine || !category) {
-        alert('Пожалуйста, заполните все обязательные поля!');
+      if (!title) {
+        alert('Название рецепта обязательно для заполнения!');
+        form.querySelector('#addTitle').focus();
+        return;
+      }
+
+      if (!time) {
+        alert('Время приготовления обязательно для заполнения!');
+        form.querySelector('#addTime').focus();
+        return;
+      }
+
+      if (!difficulty) {
+        alert('Выберите сложность рецепта!');
+        form.querySelector('#addDifficulty').focus();
+        return;
+      }
+
+      if (!cuisine) {
+        alert('Выберите кухню рецепта!');
+        form.querySelector('#addCuisine').focus();
+        return;
+      }
+
+      if (!category) {
+        alert('Выберите тип блюда!');
+        form.querySelector('#addCategory').focus();
         return;
       }
 
@@ -470,7 +531,7 @@ export default class RecipesBoardPresenter {
 
   #getFilterDisplayName(key, value) {
     const displayNames = {
-      cuisine: `🌍 ${value.replace(/[🇷🇺🇮🇹🇫🇷🇨🇳🇯🇵🇲🇽🇹🇭🇺🇸🇪🇸]/g, '').trim()}`,
+      cuisine: `🌍 ${value.replace(/[🇷🇺🇮🇹🇫🇷🇨🇳🇯🇵🇲🇽]/g, '').trim()}`,
       time: `⏱️ ${this.#getTimeDisplayName(value)}`,
       difficulty: `📊 ${this.#getDifficultyDisplayName(value)}`,
       category: `🍽️ ${value}`,

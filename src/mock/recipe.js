@@ -40,5 +40,19 @@ export const mockRecipes = [
     cookingTime: "short",
     difficultyLevel: "easy",
     category: "Завтраки"
+  },
+  {
+    id: "4",
+    title: "Плов",
+    time: "1 ч 30 мин",
+    difficulty: "🧑‍🍳 Профессионал", 
+    rating: "4.8",
+    description: "Ароматный узбекский плов с бараниной и специями.",
+    tags: ["Основные", "Сытные", "Мясо"],
+    badge: "Традиционный",
+    cuisine: "🇺🇿 Узбекская",
+    cookingTime: "long",
+    difficultyLevel: "hard",
+    category: "Основные"
   }
 ];
