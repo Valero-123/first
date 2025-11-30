@@ -1,4 +1,4 @@
-import { AbstractComponent } from './abstract-component.js';
+import { AbstractComponent } from '../framework/view/abstract-component.js';
 
 function createEmptyComponentTemplate() {
   return `

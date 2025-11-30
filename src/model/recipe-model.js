@@ -1,155 +1,150 @@
+import { mockRecipes } from '../mock/recipe.js';
+
 export default class RecipeModel {
-  constructor() {
-    this._recipes = [];
-    this._observers = [];
-  }
+  #recipes = [...mockRecipes];
+  #observers = [];
 
   get recipes() {
-    return this._recipes;
+    return this.#recipes;
   }
 
-  setRecipes(recipes) {
-    this._recipes = recipes;
-    this._notifyObservers();
+  addRecipe(recipeData) {
+    const newRecipe = {
+      id: this.#generateId(),
+      title: recipeData.title,
+      time: recipeData.time,
+      difficulty: recipeData.difficulty,
+      rating: "4.5",
+      description: recipeData.description,
+      tags: recipeData.tags,
+      badge: "Новый",
+      cuisine: recipeData.cuisine,
+      cookingTime: recipeData.cookingTime,
+      difficultyLevel: recipeData.difficultyLevel,
+      category: recipeData.category || "Основные"
+    };
+    
+    this.#recipes.push(newRecipe);
+    this._notify();
   }
 
-  addRecipe(recipe) {
-    // Генерируем ID если его нет
-    if (!recipe.id) {
-      recipe.id = Date.now().toString();
-    }
-    this._recipes.unshift(recipe);
-    this._notifyObservers();
-  }
-
-  updateRecipe(recipeId, updatedData) {
-    const index = this._recipes.findIndex(recipe => recipe.id === recipeId);
+  updateRecipe(id, updatedData) {
+    const index = this.#recipes.findIndex(recipe => recipe.id === id);
     if (index !== -1) {
-      this._recipes[index] = { ...this._recipes[index], ...updatedData };
-      this._notifyObservers();
+      this.#recipes[index] = { ...this.#recipes[index], ...updatedData };
+      this._notify();
     }
   }
 
-  deleteRecipe(recipeId) {
-    this._recipes = this._recipes.filter(recipe => recipe.id !== recipeId);
-    this._notifyObservers();
+  deleteRecipe(id) {
+    this.#recipes = this.#recipes.filter(recipe => recipe.id !== id);
+    this._notify();
   }
 
-  // НОВЫЙ МЕТОД: Перемещение рецепта
-  moveRecipe(draggedId, targetId) {
-    const draggedIndex = this._recipes.findIndex(recipe => recipe.id === draggedId);
-    const targetIndex = this._recipes.findIndex(recipe => recipe.id === targetId);
-
-    if (draggedIndex !== -1 && targetIndex !== -1 && draggedIndex !== targetIndex) {
-      // Удаляем перемещаемый рецепт и вставляем его на новую позицию
-      const [movedRecipe] = this._recipes.splice(draggedIndex, 1);
-      this._recipes.splice(targetIndex, 0, movedRecipe);
-      
-      // Сохраняем порядок в localStorage
-      this._saveRecipesOrder();
-      
-      this._notifyObservers();
-      return true;
-    }
-    return false;
-  }
-
-  // Сохранение порядка рецептов
-  _saveRecipesOrder() {
-    if (typeof Storage !== 'undefined') {
-      const recipesOrder = this._recipes.map(recipe => recipe.id);
-      localStorage.setItem('recipesOrder', JSON.stringify(recipesOrder));
-    }
-  }
-
-  // Загрузка порядка рецептов
-  loadRecipesOrder() {
-    if (typeof Storage !== 'undefined') {
-      const savedOrder = localStorage.getItem('recipesOrder');
-      if (savedOrder) {
-        const order = JSON.parse(savedOrder);
-        this._sortRecipesByOrder(order);
-      }
-    }
-  }
-
-  // Сортировка рецептов по сохраненному порядку
-  _sortRecipesByOrder(order) {
-    this._recipes.sort((a, b) => {
-      return order.indexOf(a.id) - order.indexOf(b.id);
-    });
+  // Drag & Drop: изменение порядка рецептов
+  reorderRecipes(sourceIndex, targetIndex) {
+    if (sourceIndex === targetIndex) return;
+    
+    const [movedRecipe] = this.#recipes.splice(sourceIndex, 1);
+    this.#recipes.splice(targetIndex, 0, movedRecipe);
+    this._notify();
   }
 
   filterRecipes(filters = {}) {
-    let filteredRecipes = [...this._recipes];
+    let filteredRecipes = [...this.#recipes];
 
-    // Фильтр по кухне
     if (filters.cuisine && filters.cuisine !== '') {
       filteredRecipes = filteredRecipes.filter(recipe => 
-        recipe.cuisine === filters.cuisine
+        this.#extractCuisineName(recipe.cuisine) === this.#extractCuisineName(filters.cuisine)
       );
     }
 
-    // Фильтр по времени приготовления
-    if (filters.time && filters.time !== '') {
-      filteredRecipes = filteredRecipes.filter(recipe => {
-        const timeValue = filters.time;
-        switch (timeValue) {
-          case 'fast':
-            return recipe.cookingTime === 'short' || (parseInt(recipe.time) <= 20);
-          case 'short':
-            return recipe.cookingTime === 'short' || (parseInt(recipe.time) <= 30);
-          case 'medium':
-            return recipe.cookingTime === 'medium' || (parseInt(recipe.time) > 30 && parseInt(recipe.time) <= 60);
-          case 'long':
-            return recipe.cookingTime === 'long' || (parseInt(recipe.time) > 60);
-          default:
-            return true;
-        }
-      });
-    }
-
-    // Фильтр по сложности
-    if (filters.difficulty && filters.difficulty !== '') {
-      filteredRecipes = filteredRecipes.filter(recipe => 
-        recipe.difficultyLevel === filters.difficulty
-      );
-    }
-
-    // Фильтр по категории
-    if (filters.category && filters.category !== '') {
-      filteredRecipes = filteredRecipes.filter(recipe => 
-        recipe.category === filters.category || 
-        recipe.tags.includes(filters.category)
-      );
-    }
-
-    // Фильтр по поиску
     if (filters.search && filters.search.trim() !== '') {
       const searchTerm = filters.search.toLowerCase().trim();
-      filteredRecipes = filteredRecipes.filter(recipe => 
+      filteredRecipes = filteredRecipes.filter(recipe =>
         recipe.title.toLowerCase().includes(searchTerm) ||
         recipe.description.toLowerCase().includes(searchTerm) ||
         recipe.tags.some(tag => tag.toLowerCase().includes(searchTerm))
       );
     }
 
+    if (filters.time && filters.time !== '') {
+      filteredRecipes = filteredRecipes.filter(recipe => {
+        const timeMinutes = this.#extractTimeMinutes(recipe.time);
+        switch (filters.time) {
+          case 'fast': return timeMinutes <= 20;
+          case 'short': return timeMinutes <= 30;
+          case 'medium': return timeMinutes <= 60;
+          case 'long': return timeMinutes > 60;
+          default: return true;
+        }
+      });
+    }
+
+    if (filters.difficulty && filters.difficulty !== '') {
+      filteredRecipes = filteredRecipes.filter(recipe => 
+        recipe.difficultyLevel === filters.difficulty
+      );
+    }
+
+    if (filters.category && filters.category !== '') {
+      filteredRecipes = filteredRecipes.filter(recipe =>
+        recipe.tags.some(tag => tag === filters.category) ||
+        recipe.category === filters.category
+      );
+    }
+
+    if (filters.rating && filters.rating !== '') {
+      const minRating = parseFloat(filters.rating);
+      filteredRecipes = filteredRecipes.filter(recipe => 
+        parseFloat(recipe.rating) >= minRating
+      );
+    }
+
+    if (filters.tags && filters.tags !== '') {
+      filteredRecipes = filteredRecipes.filter(recipe =>
+        recipe.tags.some(tag => tag === filters.tags)
+      );
+    }
+
     return filteredRecipes;
   }
 
+  #extractCuisineName(cuisineString) {
+    return cuisineString.replace(/[🇷🇺🇮🇹🇫🇷🇨🇳🇯🇵🇲🇽🇹🇭🇺🇸🇪🇸🇭🇺🇮🇱🇱🇧🇰🇷🇨🇺🇬🇷🇮🇳🇻🇳]/g, '').trim();
+  }
+
+  #extractTimeMinutes(timeString) {
+    if (!timeString) return 0;
+    
+    if (timeString.includes('ч')) {
+      const hours = parseInt(timeString) || 0;
+      const minutesMatch = timeString.match(/(\d+)\s*мин/);
+      const minutes = minutesMatch ? parseInt(minutesMatch[1]) : 0;
+      return hours * 60 + minutes;
+    } else {
+      const minutesMatch = timeString.match(/(\d+)/);
+      return minutesMatch ? parseInt(minutesMatch[1]) : 0;
+    }
+  }
+
   addObserver(observer) {
-    this._observers.push(observer);
+    this.#observers.push(observer);
   }
 
   removeObserver(observer) {
-    this._observers = this._observers.filter(obs => obs !== observer);
+    this.#observers = this.#observers.filter(obs => obs !== observer);
   }
 
-  _notifyObservers() {
-    this._observers.forEach(observer => {
+  _notify() {
+    this.#observers.forEach(observer => {
       if (typeof observer === 'function') {
         observer();
       }
     });
+  }
+
+  #generateId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
   }
 }
