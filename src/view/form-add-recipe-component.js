@@ -19,9 +19,6 @@ function createFormAddRecipeComponentTemplate() {
           <option value="🇨🇳 Китайская">🇨🇳 Китайская</option>
           <option value="🇯🇵 Японская">🇯🇵 Японская</option>
           <option value="🇲🇽 Мексиканская">🇲🇽 Мексиканская</option>
-          <option value="🇹🇭 Тайская">🇹🇭 Тайская</option>
-          <option value="🇺🇸 Американская">🇺🇸 Американская</option>
-          <option value="🇪🇸 Испанская">🇪🇸 Испанская</option>
         </select>
       </div>
 
@@ -55,9 +52,6 @@ function createFormAddRecipeComponentTemplate() {
           <option value="Основные">🍛 Основные блюда</option>
           <option value="Десерты">🍰 Десерты</option>
           <option value="Завтраки">🥞 Завтраки</option>
-          <option value="Напитки">🍹 Напитки</option>
-          <option value="Салаты">🥙 Салаты</option>
-          <option value="Выпечка">🥖 Выпечка</option>
         </select>
       </div>
     </div>
