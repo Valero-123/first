@@ -1890,3 +1890,83 @@ body.dark-theme .clear-all-filters-btn:hover {
   font-weight: bold;
   font-size: 1.2rem;
 }
+/* Стили для выпадающего списка фильтров */
+.filters-dropdown-section {
+  margin: 1.5rem 0;
+}
+
+.filters-dropdown {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.2rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--surface-light);
+}
+
+.dropdown-header:hover {
+  background: var(--surface-dark);
+}
+
+.dropdown-icon {
+  font-size: 1.2rem;
+}
+
+.dropdown-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.dropdown-arrow {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  color: var(--text-muted);
+}
+
+.dropdown-content {
+  display: none;
+  padding: 1.5rem;
+  background: var(--surface);
+}
+
+.dropdown-content.active {
+  display: block;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Адаптивность для выпадающего списка */
+@media (max-width: 768px) {
+  .filters-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .dropdown-content {
+    padding: 1rem;
+  }
+  
+  .dropdown-header {
+    padding: 1rem;
+  }
+}

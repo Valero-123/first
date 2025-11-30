@@ -41,6 +41,7 @@ export default class RecipesBoardPresenter {
     // Рендерим рецепты и настраиваем обработчики
     this.#renderRecipes();
     this.#setupEventListeners();
+    this.#setupFiltersDropdown(); // Настройка выпадающего списка
   }
 
   #renderRecipes() {
@@ -82,6 +83,35 @@ export default class RecipesBoardPresenter {
     // Настраиваем обработчики для рецептов
     this.#setupRecipeEventListeners();
     this.#setupDragAndDrop();
+  }
+
+  // НОВЫЙ МЕТОД: Настройка выпадающего списка фильтров
+  #setupFiltersDropdown() {
+    const dropdownHeader = this.#boardContainer.querySelector('.dropdown-header');
+    const dropdownContent = this.#boardContainer.querySelector('.dropdown-content');
+    
+    if (dropdownHeader && dropdownContent) {
+      dropdownHeader.addEventListener('click', () => {
+        dropdownContent.classList.toggle('active');
+        const arrow = dropdownHeader.querySelector('.dropdown-arrow');
+        if (arrow) {
+          arrow.textContent = dropdownContent.classList.contains('active') ? '▲' : '▼';
+        }
+      });
+
+      // Закрытие при клике вне dropdown
+      document.addEventListener('click', (event) => {
+        if (!event.target.closest('.filters-dropdown')) {
+          dropdownContent.classList.remove('active');
+          const arrow = dropdownHeader.querySelector('.dropdown-arrow');
+          if (arrow) {
+            arrow.textContent = '▼';
+          }
+        }
+      });
+
+      console.log('✅ Filters dropdown setup completed');
+    }
   }
 
   // Drag & Drop Implementation
@@ -181,7 +211,7 @@ export default class RecipesBoardPresenter {
       console.log('✅ Search listeners added');
     }
 
-    // НОВАЯ КНОПКА: Добавление рецепта в поисковой секции
+    // Кнопка добавления рецепта
     if (addRecipeMainBtn) {
       addRecipeMainBtn.addEventListener('click', () => {
         console.log('➕ Add recipe main button clicked');
@@ -192,7 +222,7 @@ export default class RecipesBoardPresenter {
       console.error('❌ Add recipe main button not found!');
     }
 
-    // Кнопка очистки фильтров (теперь в секции активных фильтров)
+    // Кнопка очистки фильтров
     if (clearFiltersBtn) {
       clearFiltersBtn.addEventListener('click', () => {
         console.log('🗑️ Clearing all filters');
@@ -201,12 +231,14 @@ export default class RecipesBoardPresenter {
       console.log('✅ Clear filters button listener added');
     }
 
-    // Фильтры
+    // Фильтры (все 6 фильтров)
     const filters = [
       { id: 'cuisineFilter', key: 'cuisine' },
       { id: 'timeFilter', key: 'time' },
       { id: 'difficultyFilter', key: 'difficulty' },
-      { id: 'categoryFilter', key: 'category' }
+      { id: 'categoryFilter', key: 'category' },
+      { id: 'ratingFilter', key: 'rating' },
+      { id: 'tagsFilter', key: 'tags' }
     ];
 
     filters.forEach(({ id, key }) => {
@@ -222,6 +254,8 @@ export default class RecipesBoardPresenter {
 
     console.log('✅ All event listeners set up');
   }
+
+  // ... остальные методы остаются без изменений (handleAddRecipe, showEditRecipeForm и т.д.)
 
   #setupRecipeEventListeners() {
     this.#boardContainer.querySelectorAll('.change').forEach(button => {
@@ -301,6 +335,10 @@ export default class RecipesBoardPresenter {
           <option value="🇨🇳 Китайская">🇨🇳 Китайская</option>
           <option value="🇯🇵 Японская">🇯🇵 Японская</option>
           <option value="🇲🇽 Мексиканская">🇲🇽 Мексиканская</option>
+          <option value="🇬🇷 Греческая">🇬🇷 Греческая</option>
+          <option value="🇮🇳 Индийская">🇮🇳 Индийская</option>
+          <option value="🇻🇳 Вьетнамская">🇻🇳 Вьетнамская</option>
+          <option value="🇪🇸 Испанская">🇪🇸 Испанская</option>
         </select>
       </div>
 
@@ -313,6 +351,9 @@ export default class RecipesBoardPresenter {
           <option value="Основные">🍛 Основные блюда</option>
           <option value="Десерты">🍰 Десерты</option>
           <option value="Завтраки">🥞 Завтраки</option>
+          <option value="Напитки">🍹 Напитки</option>
+          <option value="Салаты">🥙 Салаты</option>
+          <option value="Выпечка">🥖 Выпечка</option>
         </select>
       </div>
 
@@ -417,7 +458,6 @@ export default class RecipesBoardPresenter {
     form.querySelector('#addTitle').focus();
   }
 
-  // Метод для формы редактирования рецепта
   #showEditRecipeForm(recipe) {
     const modal = document.createElement('div');
     modal.className = 'edit-modal';
@@ -470,6 +510,10 @@ export default class RecipesBoardPresenter {
           <option value="🇨🇳 Китайская" ${recipe.cuisine.includes('Китайская') ? 'selected' : ''}>🇨🇳 Китайская</option>
           <option value="🇯🇵 Японская" ${recipe.cuisine.includes('Японская') ? 'selected' : ''}>🇯🇵 Японская</option>
           <option value="🇲🇽 Мексиканская" ${recipe.cuisine.includes('Мексиканская') ? 'selected' : ''}>🇲🇽 Мексиканская</option>
+          <option value="🇬🇷 Греческая" ${recipe.cuisine.includes('Греческая') ? 'selected' : ''}>🇬🇷 Греческая</option>
+          <option value="🇮🇳 Индийская" ${recipe.cuisine.includes('Индийская') ? 'selected' : ''}>🇮🇳 Индийская</option>
+          <option value="🇻🇳 Вьетнамская" ${recipe.cuisine.includes('Вьетнамская') ? 'selected' : ''}>🇻🇳 Вьетнамская</option>
+          <option value="🇪🇸 Испанская" ${recipe.cuisine.includes('Испанская') ? 'selected' : ''}>🇪🇸 Испанская</option>
         </select>
       </div>
 
@@ -481,6 +525,9 @@ export default class RecipesBoardPresenter {
           <option value="Основные" ${recipe.category === 'Основные' ? 'selected' : ''}>🍛 Основные блюда</option>
           <option value="Десерты" ${recipe.category === 'Десерты' ? 'selected' : ''}>🍰 Десерты</option>
           <option value="Завтраки" ${recipe.category === 'Завтраки' ? 'selected' : ''}>🥞 Завтраки</option>
+          <option value="Напитки" ${recipe.category === 'Напитки' ? 'selected' : ''}>🍹 Напитки</option>
+          <option value="Салаты" ${recipe.category === 'Салаты' ? 'selected' : ''}>🥙 Салаты</option>
+          <option value="Выпечка" ${recipe.category === 'Выпечка' ? 'selected' : ''}>🥖 Выпечка</option>
         </select>
       </div>
 
@@ -623,7 +670,9 @@ export default class RecipesBoardPresenter {
       '#cuisineFilter': (el) => el.selectedIndex = 0,
       '#timeFilter': (el) => el.selectedIndex = 0,
       '#difficultyFilter': (el) => el.selectedIndex = 0,
-      '#categoryFilter': (el) => el.selectedIndex = 0
+      '#categoryFilter': (el) => el.selectedIndex = 0,
+      '#ratingFilter': (el) => el.selectedIndex = 0,
+      '#tagsFilter': (el) => el.selectedIndex = 0
     };
 
     Object.entries(elements).forEach(([selector, resetFn]) => {
@@ -690,10 +739,12 @@ export default class RecipesBoardPresenter {
 
   #getFilterDisplayName(key, value) {
     const displayNames = {
-      cuisine: `🌍 ${value.replace(/[🇷🇺🇮🇹🇫🇷🇨🇳🇯🇵🇲🇽]/g, '').trim()}`,
+      cuisine: `🌍 ${value.replace(/[🇷🇺🇮🇹🇫🇷🇨🇳🇯🇵🇲🇽🇬🇷🇮🇳🇻🇳🇪🇸]/g, '').trim()}`,
       time: `⏱️ ${this.#getTimeDisplayName(value)}`,
       difficulty: `📊 ${this.#getDifficultyDisplayName(value)}`,
       category: `🍽️ ${value}`,
+      rating: `⭐ ${value}+`,
+      tags: `🏷️ ${value}`,
       search: `🔍 "${value}"`
     };
 
@@ -727,6 +778,8 @@ export default class RecipesBoardPresenter {
       time: '#timeFilter',
       difficulty: '#difficultyFilter',
       category: '#categoryFilter',
+      rating: '#ratingFilter',
+      tags: '#tagsFilter',
       search: '.search-input'
     };
 
