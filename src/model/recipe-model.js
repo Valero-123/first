@@ -26,6 +26,7 @@ export default class RecipeModel {
     
     this.#recipes.push(newRecipe);
     this._notify();
+    console.log('✅ Recipe added:', newRecipe.title);
   }
 
   updateRecipe(id, updatedData) {
@@ -33,12 +34,15 @@ export default class RecipeModel {
     if (index !== -1) {
       this.#recipes[index] = { ...this.#recipes[index], ...updatedData };
       this._notify();
+      console.log('✅ Recipe updated:', this.#recipes[index].title);
     }
   }
 
   deleteRecipe(id) {
+    const recipe = this.#recipes.find(r => r.id === id);
     this.#recipes = this.#recipes.filter(recipe => recipe.id !== id);
     this._notify();
+    console.log('🗑️ Recipe deleted:', recipe?.title);
   }
 
   // Drag & Drop: изменение порядка рецептов
@@ -48,6 +52,7 @@ export default class RecipeModel {
     const [movedRecipe] = this.#recipes.splice(sourceIndex, 1);
     this.#recipes.splice(targetIndex, 0, movedRecipe);
     this._notify();
+    console.log('🔀 Recipes reordered:', { sourceIndex, targetIndex, recipe: movedRecipe.title });
   }
 
   filterRecipes(filters = {}) {
@@ -124,12 +129,32 @@ export default class RecipeModel {
       });
     }
 
+    // Filter by rating
+    if (filters.rating && filters.rating !== '') {
+      const minRating = parseFloat(filters.rating);
+      filteredRecipes = filteredRecipes.filter(recipe => {
+        const recipeRating = parseFloat(recipe.rating);
+        const matches = recipeRating >= minRating;
+        console.log(`⭐ ${recipe.title} - рейтинг: ${recipe.rating}, фильтр: ${minRating}+, совпадение: ${matches}`);
+        return matches;
+      });
+    }
+
+    // Filter by tags
+    if (filters.tags && filters.tags !== '') {
+      filteredRecipes = filteredRecipes.filter(recipe => {
+        const matches = recipe.tags.some(tag => tag === filters.tags);
+        console.log(`🏷️ ${recipe.title} - теги: ${recipe.tags}, фильтр: ${filters.tags}, совпадение: ${matches}`);
+        return matches;
+      });
+    }
+
     console.log('🔍 Filtration completed. Results:', filteredRecipes.length);
     return filteredRecipes;
   }
 
   #extractCuisineName(cuisineString) {
-    return cuisineString.replace(/[🇷🇺🇮🇹🇫🇷🇨🇳🇯🇵🇲🇽]/g, '').trim();
+    return cuisineString.replace(/[🇷🇺🇮🇹🇫🇷🇨🇳🇯🇵🇲🇽🇹🇭🇺🇸🇪🇸🇭🇺🇮🇱🇱🇧🇰🇷🇨🇺🇬🇷🇮🇳🇻🇳]/g, '').trim();
   }
 
   #extractTimeMinutes(timeString) {
@@ -148,13 +173,16 @@ export default class RecipeModel {
 
   addObserver(observer) {
     this.#observers.push(observer);
+    console.log('👀 Observer added to RecipeModel');
   }
 
   removeObserver(observer) {
     this.#observers = this.#observers.filter(obs => obs !== observer);
+    console.log('👋 Observer removed from RecipeModel');
   }
 
   _notify() {
+    console.log('🔔 Notifying observers, total:', this.#observers.length);
     this.#observers.forEach(observer => {
       if (typeof observer === 'function') {
         observer();

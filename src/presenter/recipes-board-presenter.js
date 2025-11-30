@@ -417,6 +417,176 @@ export default class RecipesBoardPresenter {
     form.querySelector('#addTitle').focus();
   }
 
+  // НОВЫЙ МЕТОД: Показ формы редактирования
+  #showEditRecipeForm(recipe) {
+    const modal = document.createElement('div');
+    modal.className = 'edit-modal';
+    
+    const form = document.createElement('div');
+    form.className = 'edit-form';
+    form.innerHTML = this.#createEditRecipeFormHTML(recipe);
+
+    modal.appendChild(form);
+    document.body.appendChild(modal);
+
+    this.#setupEditRecipeFormListeners(modal, form, recipe);
+  }
+
+  // НОВЫЙ МЕТОД: Создание HTML формы редактирования
+  #createEditRecipeFormHTML(recipe) {
+    return `
+      <h2>Редактировать рецепт</h2>
+      
+      <div>
+        <label class="required-field">Название рецепта</label>
+        <input type="text" id="editTitle" value="${recipe.title}" required>
+      </div>
+
+      <div>
+        <label>Описание</label>
+        <textarea id="editDescription">${recipe.description}</textarea>
+      </div>
+
+      <div>
+        <label class="required-field">Время приготовления</label>
+        <input type="text" id="editTime" value="${recipe.time}" required>
+        <div class="form-hint">Примеры: 15 мин, 30 мин, 1 ч, 1 ч 30 мин</div>
+      </div>
+
+      <div>
+        <label class="required-field">Сложность</label>
+        <select id="editDifficulty" required>
+          <option value="👶 Начинающий" ${recipe.difficulty.includes('Начинающий') ? 'selected' : ''}>👶 Начинающий</option>
+          <option value="👨‍🍳 Любитель" ${recipe.difficulty.includes('Любитель') ? 'selected' : ''}>👨‍🍳 Любитель</option>
+          <option value="🧑‍🍳 Профессионал" ${recipe.difficulty.includes('Профессионал') ? 'selected' : ''}>🧑‍🍳 Профессионал</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="required-field">Кухня</label>
+        <select id="editCuisine" required>
+          <option value="🇷🇺 Русская" ${recipe.cuisine.includes('Русская') ? 'selected' : ''}>🇷🇺 Русская</option>
+          <option value="🇮🇹 Итальянская" ${recipe.cuisine.includes('Итальянская') ? 'selected' : ''}>🇮🇹 Итальянская</option>
+          <option value="🇫🇷 Французская" ${recipe.cuisine.includes('Французская') ? 'selected' : ''}>🇫🇷 Французская</option>
+          <option value="🇨🇳 Китайская" ${recipe.cuisine.includes('Китайская') ? 'selected' : ''}>🇨🇳 Китайская</option>
+          <option value="🇯🇵 Японская" ${recipe.cuisine.includes('Японская') ? 'selected' : ''}>🇯🇵 Японская</option>
+          <option value="🇲🇽 Мексиканская" ${recipe.cuisine.includes('Мексиканская') ? 'selected' : ''}>🇲🇽 Мексиканская</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="required-field">Тип блюда</label>
+        <select id="editCategory" required>
+          <option value="Закуски" ${recipe.category === 'Закуски' ? 'selected' : ''}>🥗 Закуски</option>
+          <option value="Супы" ${recipe.category === 'Супы' ? 'selected' : ''}>🍲 Супы</option>
+          <option value="Основные" ${recipe.category === 'Основные' ? 'selected' : ''}>🍛 Основные блюда</option>
+          <option value="Десерты" ${recipe.category === 'Десерты' ? 'selected' : ''}>🍰 Десерты</option>
+          <option value="Завтраки" ${recipe.category === 'Завтраки' ? 'selected' : ''}>🥞 Завтраки</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Теги (через запятую)</label>
+        <input type="text" id="editTags" value="${recipe.tags.join(', ')}" placeholder="Например: Быстро, Вегетарианские, Здоровые">
+        <div class="form-hint">Необязательное поле</div>
+      </div>
+
+      <div class="edit-button-group">
+        <button type="button" class="cancel-btn">Отмена</button>
+        <button type="button" class="save-btn">Сохранить изменения</button>
+      </div>
+    `;
+  }
+
+  // НОВЫЙ МЕТОД: Настройка обработчиков формы редактирования
+  #setupEditRecipeFormListeners(modal, form, recipe) {
+    const cancelBtn = form.querySelector('.cancel-btn');
+    const saveBtn = form.querySelector('.save-btn');
+
+    const closeModal = () => document.body.removeChild(modal);
+
+    cancelBtn.addEventListener('click', closeModal);
+
+    saveBtn.addEventListener('click', () => {
+      const title = form.querySelector('#editTitle').value.trim();
+      const description = form.querySelector('#editDescription').value.trim();
+      const time = form.querySelector('#editTime').value.trim();
+      const difficulty = form.querySelector('#editDifficulty').value;
+      const cuisine = form.querySelector('#editCuisine').value;
+      const category = form.querySelector('#editCategory').value;
+      const tagsInput = form.querySelector('#editTags').value.trim();
+
+      if (!title) {
+        alert('Название рецепта обязательно для заполнения!');
+        form.querySelector('#editTitle').focus();
+        return;
+      }
+
+      if (!time) {
+        alert('Время приготовления обязательно для заполнения!');
+        form.querySelector('#editTime').focus();
+        return;
+      }
+
+      if (!difficulty) {
+        alert('Выберите сложность рецепта!');
+        form.querySelector('#editDifficulty').focus();
+        return;
+      }
+
+      if (!cuisine) {
+        alert('Выберите кухню рецепта!');
+        form.querySelector('#editCuisine').focus();
+        return;
+      }
+
+      if (!category) {
+        alert('Выберите тип блюда!');
+        form.querySelector('#editCategory').focus();
+        return;
+      }
+
+      let difficultyLevel = 'medium';
+      if (difficulty.includes('Начинающий')) difficultyLevel = 'easy';
+      if (difficulty.includes('Профессионал')) difficultyLevel = 'hard';
+
+      let cookingTime = 'medium';
+      const timeMinutes = this.#extractTimeMinutes(time);
+      if (timeMinutes <= 20) cookingTime = 'fast';
+      else if (timeMinutes <= 30) cookingTime = 'short';
+      else if (timeMinutes > 60) cookingTime = 'long';
+
+      const updatedData = {
+        title,
+        description: description || `${title} - вкусный рецепт`,
+        time,
+        difficulty,
+        cuisine,
+        category,
+        tags: tagsInput ? tagsInput.split(',').map(tag => tag.trim()) : [category],
+        cookingTime,
+        difficultyLevel
+      };
+
+      this.#recipeModel.updateRecipe(recipe.id, updatedData);
+      closeModal();
+      alert(`Рецепт "${title}" успешно обновлен!`);
+    });
+
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', function closeOnEscape(event) {
+      if (event.key === 'Escape') {
+        closeModal();
+        document.removeEventListener('keydown', closeOnEscape);
+      }
+    });
+
+    form.querySelector('#editTitle').focus();
+  }
+
   #extractTimeMinutes(timeString) {
     if (!timeString) return 0;
     
@@ -434,7 +604,8 @@ export default class RecipesBoardPresenter {
   #handleEditRecipe(recipeId) {
     const recipe = this.#recipeModel.recipes.find(r => r.id === recipeId);
     if (recipe) {
-      alert(`Редактирование рецепта: ${recipe.title}\n\nФункция в разработке.`);
+      console.log('✏️ Editing recipe:', recipe.title);
+      this.#showEditRecipeForm(recipe);
     }
   }
 
