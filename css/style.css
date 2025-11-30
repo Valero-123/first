@@ -1863,4 +1863,30 @@ body.dark-theme .clear-all-filters-btn:hover {
   .card-content {
     padding: 1.5rem;
   }
+}/* Стили для кнопки добавления рецепта в поисковой секции */
+.add-recipe-main-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.add-recipe-main-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.add-recipe-main-btn .add-recipe-icon {
+  font-weight: bold;
+  font-size: 1.2rem;
 }

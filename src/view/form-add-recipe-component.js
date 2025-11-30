@@ -5,7 +5,11 @@ function createFormAddRecipeComponentTemplate() {
     <div class="search-section">
       <input type="text" class="search-input" placeholder="🔍 Поиск рецептов по названию, ингредиентам...">
       <button class="search-btn" type="button">Найти</button>
-      <button class="clear-filters-btn" type="button">Очистить фильтры</button>
+      <!-- ЗАМЕНА: Вместо очистки фильтров - кнопка добавления рецепта -->
+      <button class="add-recipe-main-btn" type="button">
+        <span class="add-recipe-icon">+</span>
+        Добавить рецепт
+      </button>
     </div>
     
     <div class="filters-grid">
@@ -59,14 +63,11 @@ function createFormAddRecipeComponentTemplate() {
     <div class="active-filters" id="activeFilters">
       <div class="active-filters-title">Активные фильтры:</div>
       <div class="active-filters-list" id="activeFiltersList"></div>
+      <!-- ДОБАВЛЕНО: Кнопка очистки фильтров в секции активных фильтров -->
+      <button class="clear-all-filters-btn" type="button">Очистить все фильтры</button>
     </div>
 
-    <div class="add-recipe-section">
-      <button class="add-recipe-btn" type="button">
-        <span class="add-recipe-icon">+</span>
-        Добавить новый рецепт
-      </button>
-    </div>
+    <!-- УДАЛЕНО: Большая кнопка добавления рецепта снизу -->
   `;
 }
 

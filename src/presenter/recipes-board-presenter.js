@@ -153,8 +153,8 @@ export default class RecipesBoardPresenter {
     
     const searchInput = this.#boardContainer.querySelector('.search-input');
     const searchBtn = this.#boardContainer.querySelector('.search-btn');
-    const clearFiltersBtn = this.#boardContainer.querySelector('.clear-filters-btn');
-    const addRecipeBtn = this.#boardContainer.querySelector('.add-recipe-btn');
+    const addRecipeMainBtn = this.#boardContainer.querySelector('.add-recipe-main-btn');
+    const clearFiltersBtn = this.#boardContainer.querySelector('.clear-all-filters-btn');
 
     // Поиск
     if (searchInput && searchBtn) {
@@ -181,13 +181,24 @@ export default class RecipesBoardPresenter {
       console.log('✅ Search listeners added');
     }
 
-    // Очистка фильтров
+    // НОВАЯ КНОПКА: Добавление рецепта в поисковой секции
+    if (addRecipeMainBtn) {
+      addRecipeMainBtn.addEventListener('click', () => {
+        console.log('➕ Add recipe main button clicked');
+        this.#handleAddRecipe();
+      });
+      console.log('✅ Add recipe main button listener added');
+    } else {
+      console.error('❌ Add recipe main button not found!');
+    }
+
+    // Кнопка очистки фильтров (теперь в секции активных фильтров)
     if (clearFiltersBtn) {
       clearFiltersBtn.addEventListener('click', () => {
         console.log('🗑️ Clearing all filters');
         this.#clearAllFilters();
       });
-      console.log('✅ Clear filters listener added');
+      console.log('✅ Clear filters button listener added');
     }
 
     // Фильтры
@@ -208,17 +219,6 @@ export default class RecipesBoardPresenter {
         });
       }
     });
-
-    // Кнопка добавления рецепта
-    if (addRecipeBtn) {
-      addRecipeBtn.addEventListener('click', () => {
-        console.log('➕ Add recipe button clicked');
-        this.#handleAddRecipe();
-      });
-      console.log('✅ Add recipe button listener added');
-    } else {
-      console.error('❌ Add recipe button not found!');
-    }
 
     console.log('✅ All event listeners set up');
   }
@@ -417,7 +417,7 @@ export default class RecipesBoardPresenter {
     form.querySelector('#addTitle').focus();
   }
 
-  // НОВЫЙ МЕТОД: Показ формы редактирования
+  // Метод для формы редактирования рецепта
   #showEditRecipeForm(recipe) {
     const modal = document.createElement('div');
     modal.className = 'edit-modal';
@@ -432,7 +432,6 @@ export default class RecipesBoardPresenter {
     this.#setupEditRecipeFormListeners(modal, form, recipe);
   }
 
-  // НОВЫЙ МЕТОД: Создание HTML формы редактирования
   #createEditRecipeFormHTML(recipe) {
     return `
       <h2>Редактировать рецепт</h2>
@@ -498,7 +497,6 @@ export default class RecipesBoardPresenter {
     `;
   }
 
-  // НОВЫЙ МЕТОД: Настройка обработчиков формы редактирования
   #setupEditRecipeFormListeners(modal, form, recipe) {
     const cancelBtn = form.querySelector('.cancel-btn');
     const saveBtn = form.querySelector('.save-btn');
